@@ -3,17 +3,28 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fyj.header.mapper.UserMapper">
+<mapper namespace="com.fyj.header.mapper.UserPwdMapper">
 
-    <!--List<User> findAll();-->
-    <!--<select id="findAll" parameterType=""-->
-    <!--User findByUserid(String userId);-->
+    <resultMap id="pwd" type="com.fyj.Entity.UserPwd">
+        <id column="userId" property="userId"></id>
+        <result column="password" property="password"></result>
+    </resultMap>
 
-    <!--void updateByUserid(String userId);-->
-
-    <!--void deleteByUserId(String userId);-->
-
-    <!--void save(User user);-->
-
-
+    <!--String changePwd(String userId,String password);-->
+    <update id="changePwd">
+        update
+          sf_userpwd
+        set
+          password = #{password}
+        where
+          userId=#{userId}
+    </update>
+    <!--UserPwd insertMsg(String userId, String password);-->
+    <insert id="insertMsg">
+        insert into sf_userpwd (userId,password)values (#{userId},#{password})
+    </insert>
+    <!--void deleteAllbyUserId(String userId);-->
+    <delete id="deleteAllbyUserId">
+        delete from sf_userpwd where userId = #{userId}
+    </delete>
 </mapper>

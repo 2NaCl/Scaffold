@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fyj.header.mapper.UserMapper">
+
+    <resultMap id="User" type="com.fyj.Entity.User">
+        <id column="id" property="id"></id>
+        <result column="userId" property="userId"></result>
+        <result column="phone" property="phone"></result>
+        <result column="email" property="email"></result>
+        <result column="city" property="city"></result>
+        <result column="home" property="home"></result>
+        <result column="idCard" property="idCard"></result>
+        <result column="birthday" property="birthday"></result>
+        <result column="loginDate" property="loginDate"></result>
+        <result column="level" property="level"></result>
+    </resultMap>
+
+    <sql id="AllArgs">
+        id,userId,phone,email,city,home,idCard,birthday,loginDate,level
+    </sql>
+
+    <!--List<User> findAll();-->
+    <select id="findAll" resultType="com.fyj.Entity.User">
+        select
+          <include refid="AllArgs"/>
+        from
+          sf_user;
+    </select>
+    <!--User findByUserid(String userId);-->
+    <select id="findByUserid" resultType="com.fyj.Entity.User" parameterType="java.lang.String">
+        select
+          <include refid="AllArgs"/>
+        from
+          sf_user
+        where userId = #{userId};
+    </select>
+    <!--void updateLevelByUserid(String userId,String level);-->
+    <update id="updateLevelByUserid">
+        update
+          sf_user set level = #{level}
+        where
+          userId = # {userId}
+    </update>
+    <!--void deleteByUserId(String userId);-->
+        <delete id="deleteByUserId">
+            delete from sf_user where userId = #{userId}
+        </delete>
+    <!--void save(User user);-->
+    <!--Api-->
+</mapper>
