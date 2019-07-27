@@ -35,7 +35,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements Use
 
     @Override
     public void deleteByUserId(String userId) {
-        this.deleteByUserId(userId);
+        this.userMapper.deleteByUserId(userId);
+    }
+
+    @Override
+    public void saveAll(User user) {
+        userMapper.save(user);
+    }
+
+    @Override
+    public String findId(String userId) {
+        String id = userMapper.findId(userId);
+        return id;
     }
 
 

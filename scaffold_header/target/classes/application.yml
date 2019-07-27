@@ -1,0 +1,12 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: scaffold_header
+  datasource:
+    url: jdbc:mysql://localhost:3306/scaffold?useUnicode=true&characterEncoding=utf8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 1
+mybatis-plus:
+  mapper-locations: classpath:mapper/**/*.xml

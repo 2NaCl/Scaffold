@@ -18,7 +18,7 @@ public interface UserPwdMapper extends Serializable, BaseMapper<UserPwd> {
      * @param password
      * @return
      */
-    String changePwd(String userId,String password);
+    void changePwd(@Param("userId") String userId,@Param("password") String password);
 
     /**
      * 注册第一步
@@ -31,6 +31,24 @@ public interface UserPwdMapper extends Serializable, BaseMapper<UserPwd> {
      * 删除账号密码信息
      * @param userId
      */
-    void deleteAllbyUserId(String userId);
 
+    void deleteAllbyUserId(String userId);
+    /**
+     * 检查是否有此账号
+     *
+     * @param userId
+     * @return
+     */
+    String userIdGet(String userId);
+
+    /**
+     * 获取到此人密码
+     */
+
+    String passwordGet(String userId);
+
+    /**
+     * 用账号获取密码
+     */
+    String getPwdById(String userId);
 }

@@ -1,6 +1,7 @@
 package com.fyj.header.service.serviceImpl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fyj.Entity.User;
 import com.fyj.Entity.UserPwd;
 import com.fyj.header.mapper.UserMapper;
 import com.fyj.header.mapper.UserPwdMapper;
@@ -18,8 +19,8 @@ public class UserPwdServiceImpl extends ServiceImpl<UserPwdMapper, UserPwd> impl
     private UserPwdMapper pwdMapper;
 
     @Override
-    public String changePwd(String userId, String password) {
-        return null;
+    public void changePwd(String userId, String password) {
+        pwdMapper.changePwd(userId,password);
     }
 
     @Override
@@ -29,6 +30,23 @@ public class UserPwdServiceImpl extends ServiceImpl<UserPwdMapper, UserPwd> impl
 
     @Override
     public void deleteAllbyUserId(String userId) {
-
+        pwdMapper.deleteAllbyUserId(userId);
     }
+
+    @Override
+    public String userIdGet(String userId) {
+        return pwdMapper.userIdGet(userId);
+    }
+
+    @Override
+    public String passwordGet(String userId) {
+        return pwdMapper.passwordGet(userId);
+    }
+
+    @Override
+    public String getPwdById(String userId) {
+        return pwdMapper.getPwdById(userId);
+    }
+
+
 }

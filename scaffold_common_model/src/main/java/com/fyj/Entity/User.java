@@ -32,7 +32,7 @@ public class User {
 
     private String birthday;
 
-    private Date loginDate;
+    private String loginDate;
 
     private String level;
 }

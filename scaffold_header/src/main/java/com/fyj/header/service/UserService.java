@@ -30,4 +30,15 @@ public interface UserService extends IService<User> {
      * 删除用户
      */
     void deleteByUserId(String userId);
+
+    /**
+     * 注册第二步
+     * @param user
+     */
+    void saveAll(User user);
+
+    /**
+     * 查找用户是否已经注册
+     */
+    String findId(String userId);
 }

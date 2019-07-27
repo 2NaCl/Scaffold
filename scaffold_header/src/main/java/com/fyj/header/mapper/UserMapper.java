@@ -36,15 +36,17 @@ public interface UserMapper extends Serializable, BaseMapper<User> {
     void deleteByUserId(String userId);
 
     /**
-     * 保存用户
+     * 注册第二步
      */
 
     void save(User user);
 
     /**
-     * 注册第二步
+     * 查找是否已经注册过
+     * @param userId
+     * @return
      */
-
+    String findId(String userId);
 
 
 
