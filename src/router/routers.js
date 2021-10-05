@@ -11,6 +11,12 @@ export const constantRouterMap = [
     hidden: true
   },
   {
+    path: '/api/test',
+    meta: { title: '登录test', noCache: true },
+    component: (resolve) => require(['@/views/test'], resolve),
+    hidden: true
+  },
+  {
     path: '/404',
     component: (resolve) => require(['@/views/features/404'], resolve),
     hidden: true
