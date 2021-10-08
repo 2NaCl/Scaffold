@@ -6,7 +6,12 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 @RestController
@@ -26,8 +31,13 @@ public class TestController {
 
     @ApiOperation("test select")
     @PostMapping(value = "/api/select")
-    public Dept select(@RequestBody Dept dept){
-        return dept;
+    public ResponseEntity<Object> select(@RequestBody Dept dept){
+        ArrayList<Dept> arrayList = new ArrayList();
+        arrayList.add(dept);
+        arrayList.add(dept);
+        arrayList.add(dept);
+        arrayList.add(dept);
+        return new ResponseEntity<>(arrayList, HttpStatus.OK);
     }
 
     @ApiOperation("test add")
