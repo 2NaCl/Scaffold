@@ -6,13 +6,8 @@ import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptDto;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,14 +26,13 @@ public class TestController {
 
     @ApiOperation("test select")
     @PostMapping(value = "/api/select")
-    public DeptDto select(Long deptId){
-        DeptDto byId = deptService.findById(deptId);
-        return byId;
+    public Dept select(@RequestBody Dept dept){
+        return dept;
     }
 
     @ApiOperation("test add")
     @PostMapping(value = "/api/add")
-    public Integer add(Dept dept){
+    public Integer add(@RequestBody Dept dept){
         deptService.create(dept);
         return 1;
     }
