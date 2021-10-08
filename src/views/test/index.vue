@@ -1,6 +1,34 @@
 <!--eslint-disable-->
 <template>
   <div class="app-container">
+    <el-table
+      :data="selectData"
+      stripe
+      style="width: 100%">
+      <el-table-column
+        prop="deptSort"
+        label="日期"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="deptSort"
+        label="姓名"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="地址">
+      </el-table-column>
+      <el-table-column
+        fixed="right"
+        label="操作"
+        width="100">
+        <template slot-scope="scope">
+          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+          <el-button type="text" size="small">编辑</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <el-button @click="test222()">test button</el-button>
     <el-dropdown>
       <span class="el-dropdown-link">
@@ -17,6 +45,10 @@
     <div class="line"></div>
     <div class="line"></div>
     <el-button type="text" @click="open1">点击打开 Message Box</el-button>
+    <el-button class="filter-item"
+               size="mini"
+               type="primary"
+               icon="el-icon-plus" @click="select">test select</el-button>
     <div class="line"></div>
     <el-button type="text" @click="open">点击打开 Message Box</el-button>
     <div class="line"></div>
@@ -74,10 +106,31 @@ export default {
   data() {
     return {
       activeIndex: '1',
-      activeIndex2: '1'
+      activeIndex2: '1',
+      tableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }, {
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄'
+      }, {
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄'
+      }, {
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄'
+      }],
+      selectData: []
     }
   },
   methods: {
+    handleClick(row) {
+      console.log(row);
+    },
     test222(){
       let url = `http://localhost:8013/api/test`
       axios.get(url).then(
@@ -86,10 +139,27 @@ export default {
     },
     select(){
       let url = `http://localhost:8013/api/select`
-      let deptId = 1
-      axios.post(url,deptId).then(
-        promise=>console.log(promise.data)
-      )
+      let dept = {
+        deptSort: 999,
+        enabled: true,
+        id: 2,
+        isTop: "1",
+        name: "test2",
+        pid: 18,
+        subCount: 0
+      }
+      axios.post(url,dept).then(
+        promise=> {
+          console.log(promise.data)
+          this.selectData = JSON.parse(JSON.stringify(promise.data))
+          console.log(this.selectData)
+        }).catch(err=>{
+          let {resp} = err
+          let resJson = JSON.parse(resp)
+          resJson.then((res)=>{
+            console.log(res)
+          })
+      })
     },
     add(){
       let url = `http://localhost:8013/api/add`
@@ -109,15 +179,6 @@ export default {
       console.log(key, keyPath)
     },
     open() {
-      // this.$alert('这是一段内容', '标题名称', {
-      //   confirmButtonText: '确定',
-      //   callback: action => {
-      //     this.$message({
-      //       type: 'info',
-      //       message: `action: ${action}`
-      //     })
-      //   }
-      // })
       let url = `http://localhost:8013/api/test`
       axios.get(url).then(
         promise => this.$alert(promise.data)
