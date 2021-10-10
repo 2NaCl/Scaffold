@@ -1,6 +1,8 @@
 <!--eslint-disable-->
 <template>
   <div class="app-container">
+
+    <el-button size="small" @click="addTest()">添加</el-button>
     <el-table
       :data="selectData"
       stripe
@@ -128,6 +130,14 @@ export default {
     }
   },
   methods: {
+    /**
+     * 1.研究一下添加或者删除之后，数据直接更新的实现
+     * 2.根据弹窗做输入的入参，将参数传递给后端
+     * @param row
+     */
+    addTest(){
+
+    },
     handleClick(row) {
       console.log(row);
     },
