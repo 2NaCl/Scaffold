@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.Test;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptDto;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -29,21 +32,32 @@ public class TestController {
         return "hahaha";
     }
 
+    @ApiOperation("selectById")
+    @PostMapping("/api/selectByName")
+    public ResponseEntity<Object> selectByName(@RequestBody Map<String,Object> map){
+        Test test = new Test();
+        System.out.println(map.get("name").toString());
+        test.setName(map.get("name").toString());
+        test.setRegion("金辉大厦");
+        List<Test> l = new ArrayList<>();
+        l.add(test);
+        return new ResponseEntity<>(l,HttpStatus.OK);
+    }
+
     @ApiOperation("test select")
     @PostMapping(value = "/api/select")
-    public ResponseEntity<Object> select(@RequestBody Dept dept){
-        ArrayList<Dept> arrayList = new ArrayList();
-        arrayList.add(dept);
-        arrayList.add(dept);
-        arrayList.add(dept);
-        arrayList.add(dept);
+    public ResponseEntity<Object> select(@RequestBody Test test){
+        ArrayList<Test> arrayList = new ArrayList();
+        arrayList.add(test);
+        arrayList.add(test);
+        arrayList.add(test);
+        arrayList.add(test);
         return new ResponseEntity<>(arrayList, HttpStatus.OK);
     }
 
     @ApiOperation("test add")
     @PostMapping(value = "/api/add")
-    public Integer add(@RequestBody Dept dept){
-        deptService.create(dept);
+    public Integer add(@RequestBody Test dept){
         return 1;
     }
 
