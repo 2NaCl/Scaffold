@@ -1,19 +1,26 @@
 <!--eslint-disable-->
 <template>
   <div class="app-container">
+    <div>
+      <el-input v-model="form.name" clearable size="small" style="width: 200px;" class="filter-item" placeholder="请输入搜索名字"></el-input>
+      <el-button class="filter-item"
+                 size="mini"
+                 type="primary"
+                 icon="el-icon-plus" @click="inputSelect(form.name)">搜索</el-button>
+    </div>
     <el-button class="filter-item"
                size="mini"
                type="primary"
                icon="el-icon-plus" @click="dialogForm = true"
     >添加
     </el-button>
-    <el-dialog title="收货地址" :visible.sync="dialogForm">
-      <el-form :model="ruleForm" :rules="rules1" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+    <el-dialog title="添加员工" :visible.sync="dialogForm">
+      <el-form :model="form" :rules="rules1" ref="form" label-width="100px" class="demo-ruleForm">
         <el-form-item label="姓名" prop="name">
-          <el-input v-model="ruleForm.name"></el-input>
+          <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="地址" prop="region">
-          <el-select v-model="ruleForm.region" placeholder="请选择活动区域">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
             <el-option label="区域一" value="shanghai"></el-option>
             <el-option label="区域二" value="beijing"></el-option>
           </el-select>
@@ -21,22 +28,22 @@
         <el-form-item label="活动时间" required>
           <el-col :span="11">
             <el-form-item prop="date1">
-              <el-date-picker type="date" placeholder="选择日期" v-model="ruleForm.date1" style="width: 100%;"
+              <el-date-picker type="date" placeholder="选择日期" v-model="form.date1" style="width: 100%;"
               ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col class="line" :span="2">-</el-col>
           <el-col :span="11">
             <el-form-item prop="date2">
-              <el-time-picker placeholder="选择时间" v-model="ruleForm.date2" style="width: 100%;"></el-time-picker>
+              <el-time-picker placeholder="选择时间" v-model="form.date2" style="width: 100%;"></el-time-picker>
             </el-form-item>
           </el-col>
         </el-form-item>
         <el-form-item label="即时配送" prop="delivery">
-          <el-switch v-model="ruleForm.delivery"></el-switch>
+          <el-switch v-model="form.delivery"></el-switch>
         </el-form-item>
         <el-form-item label="活动性质" prop="type">
-          <el-checkbox-group v-model="ruleForm.type">
+          <el-checkbox-group v-model="form.type">
             <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
             <el-checkbox label="地推活动" name="type"></el-checkbox>
             <el-checkbox label="线下主题活动" name="type"></el-checkbox>
@@ -44,17 +51,17 @@
           </el-checkbox-group>
         </el-form-item>
         <el-form-item label="特殊资源" prop="resource">
-          <el-radio-group v-model="ruleForm.resource">
+          <el-radio-group v-model="form.resource">
             <el-radio label="线上品牌商赞助"></el-radio>
             <el-radio label="线下场地免费"></el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="活动形式" prop="desc">
-          <el-input type="textarea" v-model="ruleForm.desc"></el-input>
+          <el-input type="textarea" v-model="form.desc"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm('form',form)">立即创建</el-button>
+          <el-button @click="resetForm('form')">重置</el-button>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -84,19 +91,31 @@
         style="width: 100%"
       >
         <el-table-column
-          prop="deptSort"
+          prop="date1"
           label="日期"
           width="180"
         >
         </el-table-column>
         <el-table-column
-          prop="deptSort"
-          label="姓名"
+          prop="date2"
+          label="日期2"
           width="180"
         >
         </el-table-column>
         <el-table-column
           prop="name"
+          label="姓名"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="resource"
+          label="资源"
+          width="180"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="region"
           label="地址"
         >
         </el-table-column>
@@ -107,7 +126,7 @@
         >
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-            <el-button type="text" @click="dialogFormVisible = true">编辑</el-button>
+            <el-button type="text" @click="modifyData(scope.$index,scope.row)">编辑</el-button>
             <el-button type="text" @click.native.prevent="confirmDelete(scope.$index,selectData)" size="small">删除
             </el-button>
           </template>
@@ -126,21 +145,13 @@
 <script>
 import axios from 'axios'
 
+var _index;
 export default {
   name: 'dialog.vue',
   data() {
     return {
+      input: '',
       //复杂弹窗
-      ruleForm: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
       rules1: {
         name: [
           { required: true, message: '请输入活动名称', trigger: 'blur' },
@@ -198,12 +209,36 @@ export default {
     }
   },
   methods: {
+    modifyData(index,row){
+      this.dialogForm = true
+      this.form= Object.assign({},row)
+      _index = index
+    },
+    inputSelect(name){
+      console.log(name)
+      let url = 'http://localhost:8013/api/selectByName'
+      let data = {
+        name:name
+      }
+      axios.post(url,data).then(
+        promise=>{
+          console.log(promise.data)
+          this.selectData = JSON.parse(JSON.stringify(promise.data))
+        }
+      )
+    },
     //复杂弹窗
-    submitForm(formName) {
-
+    submitForm(formName,form) {
+      let url = 'http://localhost:8013/api/select'
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          axios.post(url,form).then(
+            promise=>{
+              this.selectData = JSON.parse(JSON.stringify(promise.data))
+            }
+          )
           alert('submit!');
+          this.dialogForm = false
         } else {
           console.log('error submit!!');
           return false;
@@ -254,7 +289,7 @@ export default {
       }
     },
     handleSave() {
-      this.$refs.ruleForm.validate((valid) => {
+      this.$refs.form.validate((valid) => {
         if (valid) {
           console.log('输入正确')
           console.log(this.form)
@@ -267,13 +302,14 @@ export default {
     select() {
       let url = `http://localhost:8013/api/select`
       let dept = {
-        deptSort: 999,
-        enabled: true,
-        id: 2,
-        isTop: '1',
-        name: 'test2',
-        pid: 18,
-        subCount: 0
+        name: '张三',
+        region: '中国',
+        date1: '2020-02-02',
+        date2: '2021-07-24',
+        delivery: false,
+        type: [],
+        resource: 'nico',
+        desc: '1'
       }
       axios.post(url, dept).then(
         promise => {
